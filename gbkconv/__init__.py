@@ -57,15 +57,19 @@ def translate_config(params):
     }
     config = {key_map[key]: val for key, val in params}
     config.setdefault('tabwidth', 2)
-    config['tabwidth'] = int(new_config['tabwidth'])
+    config['tabwidth'] = int(config['tabwidth'])
     config.setdefault('src_encoding', 'gbk')
     config.setdefault('dst_encoding', 'utf8')
     return config
 
 
-def main(argv):
-    params, files = getopt.gnu_getopt(argv[1:], 's:d:t:h')
-    config = translate_config(params)
+def main(argv=None):
+    argv = argv or sys.argv
+    try:
+      params, files = getopt.gnu_getopt(argv[1:], 's:d:t:h')
+      config = translate_config(params)
+    except getopt.GetoptError:
+      config = {'help': True}
 
     if config.get('help') is not None:
         print_help();
